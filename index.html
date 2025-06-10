@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sevgilime Özel</title>
+  <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    body {
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      padding: 20px 0;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+    }
+    .container {
+      position: relative;
+      width: 100%;
+      max-width: 390px;
+      background-color: #f0f0f0;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.6);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 80px; /* buton alt boşluk */
+    }
+    .page-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      position: relative;
+    }
+
+    /* 4.jpg için özel container */
+    .last-image-container {
+      position: relative;
+      width: 100%;
+    }
+
+    /* Music Player (4.jpg üstüne) */
+    .music-player {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      background-color: rgba(135, 206, 235, 0.8);
+      padding: 10px 25px;
+      border-radius: 25px;
+      box-shadow: 0 3px 8px rgba(135, 206, 235, 0.6);
+      cursor: pointer;
+      user-select: none;
+    }
+    #playPauseBtn {
+      all: unset;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      text-align: center;
+    }
+    #playPauseBtn:hover {
+      color: #d0f0ff;
+    }
+
+    /* Barışalım mı butonu ve konumu */
+    .peace-button-container {
+      position: relative;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .peace-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #ff5c5c;
+      border: none;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(255, 92, 92, 0.7);
+      transition: background-color 0.3s ease;
+      z-index: 15;
+    }
+    .peace-btn:hover {
+      background-color: #e04e4e;
+    }
+
+    /* Modal (popup) arka plan */
+    .modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+    .modal.active {
+      display: flex;
+    }
+
+    /* Modal içerik */
+    .modal-content {
+      background: white;
+      padding: 25px 30px;
+      border-radius: 15px;
+      max-width: 320px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+    .modal-content p {
+      font-size: 18px;
+      margin-bottom: 25px;
+      color: #444;
+    }
+    .modal-buttons {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        justify-items: center;
+        }
+    .modal-buttons button {
+      padding: 10px 20px;
+      font-weight: 600;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      min-width: 120px;
+    }
+    .btn-yes {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .btn-yes:hover {
+      background-color: #3e8e41;
+    }
+    .btn-no {
+      background-color: #f44336;
+      color: white;
+    }
+    .btn-no:hover {
+      background-color: #d32f2f;
+    }
+
+    /* Uyarı mesaj */
+    .alert-message {
+      margin-top: 15px;
+      color: #f44336;
+      font-weight: 600;
+      display: none;
+    }
+
+    /* Canvas konfeti (tam ekran) */
+    #confetti-canvas {
+      position: fixed;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      display: none;
+    }
+
+    /* 6.png ve sayaç için container */
+    .countdown-container {
+      position: relative;
+      width: 100%;
+      max-width: 390px;
+      margin-top: 20px;
+    }
+
+    /* Sayaç kutusu stili */
+    #timeCounter {
+      position: absolute;
+      top: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0,0,0,0.5);
+      color: #fff;
+      font-size: 22px;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 30px;
+      user-select: none;
+      text-align: center;
+      width: fit-content;
+      min-width: 250px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* --- Yeni: Mutluluk Butonu (7.png üzerinde) --- */
+    .countdown-container {
+      position: relative; /* zaten vardı */
+    }
+    #mutlulukBtn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background-color: #87CEEB; /* gökyüzü mavisi */
+      border: none;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 25px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgba(135, 206, 235, 0.7);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      user-select: none;
+      transition: background-color 0.3s ease;
+      z-index: 20;
+    }
+    #mutlulukBtn:hover {
+      background-color: #6fb5e7;
+    }
+
+    /* Kalp ikonu için */
+    #mutlulukBtn .heart {
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    /* --- Yeni: Mutluluk Modal --- */
+    #mutlulukModal .modal-content {
+      max-width: 350px;
+    }
+    #mutlulukModal .modal-buttons {
+      flex-wrap: nowrap;
+      justify-content: space-around;
+    }
+    #mutlulukModal .modal-buttons button {
+      min-width: 90px;
+      background-color: #87CEEB;
+      color: #003f7f;
+      font-weight: 700;
+      border-radius: 20px;
+      box-shadow: 0 3px 6px rgba(135, 206, 235, 0.6);
+      transition: background-color 0.3s ease;
+    }
+    #mutlulukModal .modal-buttons button:hover {
+      background-color: #6fb5e7;
+      color: white;
+    }
+
+    /* Mutluluk mesajı */
+    #mutlulukMessage {
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #004a99;
+      min-height: 48px;
+    }
+
+    .Flower-container {
+    position: relative;
+    width: 100%;
+    max-width: 390px;
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .Flower-container .image-wrapper {
+    position: relative; /* Buton için referans noktası */
+  }
+  
+  #moreFlowersBtn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #87CEEB;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(135, 206, 235, 0.7);
+    z-index: 10;
+    user-select: none;
+    transition: background-color 0.3s ease;
+    margin-top: 40px;
+  }
+  
+  #moreFlowersBtn:hover {
+    background-color: #6fb5e7;
+  }
+
+  #confetti-container {
+  position: fixed;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: visible;
+  z-index: 9999;
+}
+
+.confetti-flower {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  background-image: url('papatya.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.9;
+  will-change: transform;
+  pointer-events: none;
+  user-select: none;
+}
+
+@keyframes fallFlower {
+  to {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+  
+  
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="2.png" alt="ilk sayfa" class="page-image" />
+    <img src="3.png" alt="ikinci sayfa" class="page-image" />
+
+    <!-- 4.jpg ve müzik butonunu içeren container -->
+    <div class="last-image-container">
+      <img src="4.jpg" alt="üçüncü sayfa" class="page-image last-image" />
+      <div class="music-player">
+        <audio id="myAudio" src="sarkı.mp3"></audio>
+        <button id="playPauseBtn">❤️ Şarkıyı Başlat</button>
+      </div>
+    </div>
+
+    <!-- 5.png ve barışalım butonu -->
+    <div class="peace-button-container">
+      <img src="5.png" alt="barışalım resmi" class="page-image" />
+      <button class="peace-btn" id="openModalBtn">Barışalım mı?</button>
+    </div>
+
+    <!-- 6.png ve sayaç container -->
+    <div class="countdown-container">
+      <img src="6.png" alt="Zaman Sayacı Resmi" class="page-image" />
+      <div id="timeCounter">Loading...</div>
+      <img src="7.png" alt="yedinci sayfa" class="page-image" />
+
+      <!-- Yeni: Mutluluk Butonu -->
+      <button id="mutlulukBtn">Mutluluk <span class="heart">❤️</span></button>
+    </div>
+
+    <div class="Flower-container" style="position: relative; width: 100%; max-width: 390px; margin-top: 20px;">
+        <div class="image-wrapper" style="position: relative;">
+          <img src="8.png" alt="flower" class="page-image" />
+          <button id="moreFlowersBtn">Daha fazla çiçek ister misin?</button>
+          <div id="confetti-container"></div>
+        </div>
+      </div>
+      
+
+  </div>
+
+  <!-- Barışalım Modal -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <p>Hadi barışalım</p>
+      <div class="modal-buttons">
+        <button class="btn-yes" id="btnYes">Olur barışalım</button>
+        <button class="btn-no" id="btnNo">Hayır barışmayalım</button>
+      </div>
+      <div class="alert-message" id="alertMsg">Buna basma yetkiniz bulunmamaktadır.</div>
+    </div>
+  </div>
+
+  <!-- Yeni: Mutluluk Modal -->
+  <div class="modal" id="mutlulukModal">
+    <div class="modal-content">
+      <p>En çok hangisine ihtiyacın var?</p>
+      <div class="modal-buttons">
+        <button class="mutluluk-option" data-type="sevgi">Sevgi</button>
+        <button class="mutluluk-option" data-type="moral">Moral</button>
+        <button class="mutluluk-option" data-type="motivasyon">Motivasyon</button>
+        <button class="mutluluk-option" data-type="hepsi">Hepsi</button>
+      </div>
+      <div id="mutlulukMessage"></div>
+      <img id="mutlulukImage" src="" alt="Mutluluk Resmi" style="max-width: 100%; margin-top: 15px; display: none; border-radius: 12px;" />
+
+    </div>
+  </div>
+
+  <!-- Konfeti canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script>
+    // Ses çalma butonu
+    const audio = document.getElementById("myAudio");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    let isPlaying = false;
+    playPauseBtn.addEventListener("click", () => {
+      if(isPlaying) {
+        audio.pause();
+        playPauseBtn.textContent = "❤️ Şarkıyı Başlat";
+      } else {
+        audio.play();
+        playPauseBtn.textContent = "❤️ Şarkıyı Durdur";
+      }
+      isPlaying = !isPlaying;
+    });
+
+    // Barışalım modalı açma ve kapama
+    const modal = document.getElementById("modal");
+    const openModalBtn = document.getElementById("openModalBtn");
+    const btnYes = document.getElementById("btnYes");
+    const btnNo = document.getElementById("btnNo");
+    const alertMsg = document.getElementById("alertMsg");
+
+    openModalBtn.addEventListener("click", () => {
+      alertMsg.style.display = "none"; // uyarıyı gizle
+      modal.classList.add("active");
+    });
+
+    modal.addEventListener("click", (e) => {
+      if(e.target === modal) {
+        modal.classList.remove("active");
+        alertMsg.style.display = "none";
+      }
+    });
+
+    btnYes.addEventListener("click", () => {
+      launchConfetti();
+      modal.classList.remove("active");
+    });
+
+    btnNo.addEventListener("click", () => {
+      alertMsg.style.display = "block";
+    });
+
+    // Konfeti efektini çalıştıran fonksiyon
+    function launchConfetti() {
+      const duration = 3 * 1000;
+      const end = Date.now() + duration;
+
+      const canvas = document.getElementById("confetti-canvas");
+      canvas.style.display = "block";
+      const confettiInstance = confetti.create(canvas, { resize: true });
+
+      (function frame() {
+        confettiInstance({
+          particleCount: 5,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 }
+        });
+        confettiInstance({
+          particleCount: 5,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 }
+        });
+
+        if(Date.now() < end) {
+          requestAnimationFrame(frame);
+        } else {
+          canvas.style.display = "none";
+        }
+      })();
+    }
+
+    // Sayacı başlatma (örnek)
+    const timeCounter = document.getElementById("timeCounter");
+
+// Başlangıç tarihini belirle: 07 Kasım 2017, 12:00
+const startDate = new Date(2017, 10, 7, 12, 0, 0); // Aylar 0'dan başladığı için 10 = Kasım
+
+function updateTimeCounter() {
+  const now = new Date();
+  let diff = now - startDate; // ms cinsinden fark
+
+  if (diff < 0) {
+    timeCounter.textContent = "Başlangıç zamanı henüz gelmedi.";
+    return;
+  }
+
+  // Milisaniyeleri parçala
+  const seconds = Math.floor(diff / 1000) % 60;
+  const minutes = Math.floor(diff / (1000 * 60)) % 60;
+  const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
+  const daysTotal = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+  // Yıl ve ay hesabı için biraz daha karmaşık ama basitçe:
+  // Önce toplam günlerden yılları çıkar, sonra kalan günlerden ayları çıkaracağız.
+
+  let years = now.getFullYear() - startDate.getFullYear();
+  let months = now.getMonth() - startDate.getMonth();
+  let days = now.getDate() - startDate.getDate();
+  let hoursRem = now.getHours() - startDate.getHours();
+  let minutesRem = now.getMinutes() - startDate.getMinutes();
+  let secondsRem = now.getSeconds() - startDate.getSeconds();
+
+  if (secondsRem < 0) {
+    secondsRem += 60;
+    minutesRem--;
+  }
+  if (minutesRem < 0) {
+    minutesRem += 60;
+    hoursRem--;
+  }
+  if (hoursRem < 0) {
+    hoursRem += 24;
+    days--;
+  }
+  if (days < 0) {
+    // Önceki ayın gün sayısını al
+    const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+    days += prevMonth;
+    months--;
+  }
+  if (months < 0) {
+    months += 12;
+    years--;
+  }
+
+  timeCounter.textContent = `Birlikte: ${years} yıl, ${months} ay, ${days} gün, ${hoursRem} saat, ${minutesRem} dakika, ${secondsRem} saniye.`;
+}
+
+updateTimeCounter();
+setInterval(updateTimeCounter, 1000);
+
+
+    /* --- Yeni: Mutluluk Butonu ve Modal Fonksiyonları --- */
+    const mutlulukBtn = document.getElementById("mutlulukBtn");
+    const mutlulukModal = document.getElementById("mutlulukModal");
+    const mutlulukOptions = document.querySelectorAll(".mutluluk-option");
+    const mutlulukMessage = document.getElementById("mutlulukMessage");
+
+    // Mutluluk butonuna tıkla modal aç
+    mutlulukBtn.addEventListener("click", () => {
+      mutlulukMessage.textContent = ""; // mesaj sıfırla
+      mutlulukModal.classList.add("active");
+    });
+
+    // Modal dışına tıklayınca modalı kapat
+    mutlulukModal.addEventListener("click", (e) => {
+      if(e.target === mutlulukModal) {
+        mutlulukModal.classList.remove("active");
+      }
+    });
+
+    // Mesajlar (her kategori için birkaç örnek)
+    const messages = {
+      sevgi: [
+        "Seni her geçen gün daha çok seviyorum.",
+        "Kalbim seninle dolup taşıyor.",
+        "Sevgi en güzel mucize, sen onun en parlak ışığısın."
+      ],
+      moral: [
+        "Her zorluk geçici, sen güçlüsün!",
+        "Bugün güzel şeyler olacak, inan buna!",
+        "Kendine inan, mucizeler seni bekliyor."
+      ],
+      motivasyon: [
+        "Başarı, vazgeçmeyenlerin ödülüdür.",
+        "Her adım seni hedefine biraz daha yaklaştırıyor.",
+        "Bugün hayallerine bir adım daha at."
+      ]
+    };
+
+    // Seçeneklere tıklanınca rastgele mesaj göster
+    mutlulukOptions.forEach(button => {
+  button.addEventListener("click", () => {
+    const type = button.getAttribute("data-type");
+    const list = messages[type];
+    const img = document.getElementById("mutlulukImage");
+    const msgBox = mutlulukMessage;
+
+    if(type === "hepsi") {
+      // Resmi göster, mesajı gizle
+      img.src = "ygt.jpg"; // resmin yolu
+      img.style.display = "block";
+      msgBox.textContent = "";
+    } else if(list && list.length > 0) {
+      // Mesaj göster, resmi gizle
+      const randomIndex = Math.floor(Math.random() * list.length);
+      const msg = list[randomIndex];
+      msgBox.textContent = msg;
+      img.style.display = "none";
+      img.src = "";
+    } else {
+      msgBox.textContent = "Mesaj bulunamadı.";
+      img.style.display = "none";
+      img.src = "";
+    }
+  });
+});
+
+const moreFlowersBtn = document.getElementById("moreFlowersBtn");
+const confettiContainer = document.getElementById("confetti-container");
+
+moreFlowersBtn.addEventListener("click", () => {
+  for (let i = 0; i < 80; i++) {
+    const flower = document.createElement("div");
+    flower.classList.add("confetti-flower");
+    flower.style.left = Math.random() * 100 + "vw";
+    flower.style.top = "-50px";
+    flower.style.animation = `fallFlower ${Math.random() * 3 + 3}s linear`;
+    confettiContainer.appendChild(flower);
+
+    setTimeout(() => {
+      confettiContainer.removeChild(flower);
+    }, 5000);
+  }
+});
+
+
+
+
+  </script>
+</body>
+</html>

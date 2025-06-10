@@ -1,0 +1,199 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    background-color: black; /* Yanları siyah yaptık */
+    display: flex;
+    justify-content: center;
+    padding: 20px 0; /* Yukarı-aşağı boşluk */
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    background-color: black; /* Yanları siyah yaptık */
+    display: flex;
+    justify-content: center;
+    padding: 20px 0; /* Yukarı-aşağı boşluk */
+  }
+  
+  .container {
+    position: relative;
+    width: 100%;
+    max-width: 390px;
+    height: auto; /* Öncelikle otomatik */
+    max-height: 650px; /* Resim yüksekliğine göre ayarla */
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.6);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 160px; /* Buton için boşluk bırak */
+  }
+  
+  
+  /* 4.jpg resmi için özel sınıf */
+  .page-image.last-image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Butonun stilini ve konumunu güncelle */
+  .music-player {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    background-color: transparent;
+  }
+  
+  
+  
+  /* Resimlar sabit */
+  .page-image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  /* İkinci resim üzerine soldan sağa saydam-siyah geçiş ekle */
+  .page-image:nth-child(2) {
+    position: relative;
+    z-index: 1;
+  }
+  
+  .page-image:nth-child(2)::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px; /* Geçiş genişliği */
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(to right, black, rgba(0,0,0,0));
+  }
+
+  .fade-transition {
+    width: 100%;
+    height: 30px; /* geçiş yüksekliği */
+    background: linear-gradient(to bottom, rgba(240,240,240,0), rgba(240,240,240,1));
+  }
+  .happiness-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #ffd700;
+    border: none;
+    color: #333;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(255, 215, 0, 0.7);
+    transition: background-color 0.3s ease;
+    z-index: 15;
+  }
+  .happiness-btn:hover {
+    background-color: #e6c200;
+  }
+
+  .popup {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+  }
+  .popup.active {
+    display: flex;
+  }
+  .popup-content {
+    background: #fff;
+    padding: 25px 30px;
+    border-radius: 15px;
+    max-width: 320px;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  }
+  .popup-content p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #444;
+  }
+  .popup-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  .popup-buttons button {
+    padding: 10px 20px;
+    font-weight: 600;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .btn-moral { background-color: #4dabf7; color: white; }
+  .btn-love { background-color: #ff6b6b; color: white; }
+  .btn-motivation { background-color: #51cf66; color: white; }
+  .popup-message {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  .btn-close {
+    background-color: #ccc;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .btn-close:hover {
+    background-color: #bbb;
+  }
+
+  
+  .mutluluk-player {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    background-color: rgba(255, 182, 193, 0.85);
+    padding: 10px 25px;
+    border-radius: 25px;
+    box-shadow: 0 3px 8px rgba(255, 182, 193, 0.6);
+    user-select: none;
+  }
+  
+
+  #mutlulukBtn:hover {
+    color: #ffe4ec;
+  }
+
+  #mutlulukImage {
+    margin-top: 15px;
+    max-width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    display: none;
+  }
+
+  
