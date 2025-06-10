@@ -1,6 +1,101 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+  <meta charset="UTF-8">
+  <title>❤️ Sürpriz Girişi</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #000;
+      background-image: url('Kalp.JPG');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+      color: white;
+    }
+
+    #login-box {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+    }
+
+    #login-box h2 {
+      margin-bottom: 20px;
+      color: #ff4d6d;
+      font-size: 22px;
+    }
+
+    #login-box p {
+      font-size: 14px;
+      margin-bottom: 20px;
+      color: #ddd;
+    }
+
+    input[type="password"] {
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      width: 80%;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #ff4d6d;
+      color: white;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #ff1e4d;
+    }
+
+    #message {
+      margin-top: 10px;
+      color: #ff8080;
+      font-size: 14px;
+    }
+
+    #content {
+      display: none; /* Başta gizli */
+      padding: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Şifre Girişi Kutusu -->
+  <div id="login-box">
+    <h2>💕 Burası Bir Sürprize Açılan Kapı</h2>
+    <p>Burası sevgilime özel. Şifreyi bilmiyorsan bu sihirli dünyaya giremezsin...</p>
+    <input type="password" id="password" placeholder="Şifreyi Gir">
+    <br>
+    <button onclick="checkPassword()">Giriş Yap</button>
+    <p id="message"></p>
+  </div>
+
+  <!-- Asıl İçerik -->
+  <div id="content">
+<!DOCTYPE html>
+<html lang="tr">
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sevgilime Özel</title>
@@ -284,7 +379,7 @@
   
   #moreFlowersBtn {
     position: absolute;
-    top: 50%;
+    top: 10%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #87CEEB;
@@ -372,10 +467,15 @@
 
     <div class="Flower-container" style="position: relative; width: 100%; max-width: 390px; margin-top: 20px;">
         <div class="image-wrapper" style="position: relative;">
-          <img src="8.png" alt="flower" class="page-image" />
+          <img src="10.JPG" alt="flower" class="page-image" />
           <button id="moreFlowersBtn">Daha fazla çiçek ister misin?</button>
           <div id="confetti-container"></div>
+
         </div>
+      </div>
+
+       <div class="Son">
+                  <img src="9.jpg" alt="flower" class="page-image" />
       </div>
       
 
@@ -639,3 +739,23 @@ moreFlowersBtn.addEventListener("click", () => {
   </script>
 </body>
 </html>
+   
+  </div>
+
+  <script>
+    function checkPassword() {
+      const password = document.getElementById("password").value;
+      const correctPassword = "gizli123";
+
+      if (password === correctPassword) {
+        document.getElementById("login-box").style.display = "none";
+        document.getElementById("content").style.display = "block";
+      } else {
+        document.getElementById("message").textContent = "Yanlış şifre... 😢";
+      }
+    }
+  </script>
+
+</body>
+</html>
+
